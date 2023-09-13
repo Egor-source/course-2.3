@@ -10,8 +10,8 @@ const {
 } = require('../controllers/tasksController');
 
 tasksApi.get('/', getAllTasks);
+tasksApi.post('/', createTask);
 tasksApi.get('/:id', getTaskById);
-tasksApi.post('/:id', createTask);
 tasksApi.patch('/:id', updateTask);
 tasksApi.delete('/:id', deleteTask);
 

@@ -1,42 +1,65 @@
-function getAllTasks (req, res) {
+const { Task } = require('../models/init');
+
+async function getAllTasks (req, res) {
     try {
-        res.send('tasks');
+        const tasks = await Task.findAll();
+        res.json(tasks);
     } catch (e) {
         res.status(400)
             .json(e);
     }
 }
 
-function getTaskById (req, res) {
+async function getTaskById (req, res) {
     try {
-        res.send(`task ${req.params.id}`);
+        const task = await Task.findByPk(req.params.id);
+        res.json(task);
     } catch (e) {
         res.status(400)
             .json(e);
     }
 }
 
-function createTask (req, res) {
+async function createTask (req, res) {
     try {
-        res.status(201).send(`task ${req.params.id} created`);
+        const { text } = req.body;
+        const newTask = await Task.create({ text });
+        res.status(201)
+            .json(newTask);
     } catch (e) {
         res.status(400)
             .json(e);
     }
 }
 
-function updateTask (req, res) {
+async function updateTask (req, res) {
     try {
-        res.send(`task ${req.params.id} updated`);
+        const {
+            text,
+            isCompleted,
+        } = req.body;
+        const task = await Task.findByPk(req.params.id);
+        task.text = text ?? task.text;
+        task.isCompleted = !!isCompleted;
+        await task.save();
+        res.status(200)
+            .json({
+                status: 'OK',
+            });
     } catch (e) {
         res.status(400)
             .json(e);
     }
 }
 
-function deleteTask (req, res) {
+async function deleteTask (req, res) {
     try {
-        res.send(`task ${req.params.id} deleted`);
+        const task = await Task.findByPk(req.params.id);
+        await task.destroy();
+        res.status(200)
+            .json({
+                status: 'OK',
+            });
     } catch (e) {
         res.status(400)
             .json(e);
