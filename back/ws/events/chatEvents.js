@@ -1,5 +1,17 @@
-function message (args, socket) {
-    socket.emit('newMessage', args);
+function message (message, {
+    io,
+    socket,
+}) {
+    io.to(socket.roomId)
+        .emit('newMessage', message);
 }
 
-module.exports = { message };
+function connectToRoom (roomId, { socket }) {
+    socket.join(roomId);
+    socket.roomId = roomId;
+}
+
+module.exports = {
+    message,
+    connectToRoom,
+};

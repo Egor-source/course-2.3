@@ -13,7 +13,10 @@ function initWs (httpServer) {
         Object.entries(events)
             .forEach(([eventName, callback]) => {
                 socket.on(eventName, (args) => {
-                    callback(args, socket);
+                    callback(args, {
+                        socket,
+                        io,
+                    });
                 });
             });
         socket.on('disconnect', (reason) => {

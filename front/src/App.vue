@@ -1,6 +1,10 @@
 <template>
   <div>
-    <input type="text" v-model="messageText">
+    <div>
+      <input type="text" placeholder="Комната" v-model="roomId">
+      <button @click="connectToRoom">Подключиться к комнате</button>
+    </div>
+    <input style="display: block" type="text" v-model="messageText">
     <div
         v-for="message in messages"
         :key="message"
@@ -21,6 +25,7 @@ export default {
       socket: null,
       messageText: '',
       messages: [],
+      roomId: null,
     };
   },
   mounted () {
@@ -34,6 +39,9 @@ export default {
     sendMessage () {
       this.socket.emit('message', this.messageText);
       this.messageText = '';
+    },
+    connectToRoom () {
+      this.socket.emit('connectToRoom', this.roomId);
     },
   },
 };
