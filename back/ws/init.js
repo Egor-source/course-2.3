@@ -1,4 +1,5 @@
 const { Server } = require('socket.io');
+const { instrument } = require('@socket.io/admin-ui');
 const events = require('./eventsList');
 
 function initWs (httpServer) {
@@ -6,6 +7,11 @@ function initWs (httpServer) {
         cors: {
             origin: '*'
         }
+    });
+
+    instrument(io, {
+        auth: false,
+        mode: 'development',
     });
 
     io.on('connection', (socket) => {

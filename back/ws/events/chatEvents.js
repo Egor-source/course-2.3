@@ -7,6 +7,9 @@ function message (message, {
 }
 
 function connectToRoom (roomId, { socket }) {
+    if (socket.roomId) {
+        socket.leave(socket.roomId);
+    }
     socket.join(roomId);
     socket.roomId = roomId;
 }

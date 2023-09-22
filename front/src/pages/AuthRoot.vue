@@ -3,12 +3,11 @@
 </template>
 
 <script>
-
 export default {
-  name: 'App',
+  name: 'AuthRoot',
 };
 </script>
 
-<style>
+<style scoped>
 
 </style>
