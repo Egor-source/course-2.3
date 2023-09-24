@@ -12,9 +12,11 @@ app.use(cors());
 
 const tasksApi = require('./routes/tasks');
 const authApi = require('./routes/auth');
+const usersApi = require('./routes/users');
 
 app.use('/tasks', tasksApi);
 app.use('/auth', authApi);
+app.use('/users', usersApi);
 
 const httpServer = createServer(app);
 

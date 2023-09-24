@@ -1,4 +1,7 @@
-const { User } = require('../models/init');
+const {
+    User,
+    Room
+} = require('../models/init');
 const crypto = require('crypto');
 
 class UserService {
@@ -18,15 +21,49 @@ class UserService {
     }
 
     static async getUserByCondition (where) {
-        const user = await User.findOne({
-            where
-        });
-        return user?.dataValues;
+        try {
+            const user = await User.findOne({
+                where
+            });
+            return user?.dataValues;
+        } catch (e) {
+            throw e;
+        }
+
     }
 
     static async getAllUsers () {
-        const users = await User.findAll();
-        return users;
+        try {
+            const users = await User.findAll();
+            return users.map(({ dataValues }) => ({
+                id: dataValues.id,
+                login: dataValues.login,
+                createdAt: dataValues.createdAt,
+                updatedAt: dataValues.updatedAt,
+            }));
+        } catch (e) {
+            throw e;
+        }
+    }
+
+    static async getUserRooms (userId) {
+        try {
+            const user = await User.findByPk(userId, {
+                include: {
+                    model: Room,
+                    include: User,
+                },
+            });
+            return user.Rooms.map((room) => ({
+                id: room.dataValues.id,
+                name: room.dataValues.name,
+                users: room.Users.map(({ dataValues }) => dataValues.id),
+                createdAt: room.dataValues.createdAt,
+                updatedAt: room.dataValues.updatedAt,
+            }));
+        } catch (e) {
+            throw e;
+        }
     }
 }
 

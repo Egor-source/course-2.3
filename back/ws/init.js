@@ -1,6 +1,7 @@
 const { Server } = require('socket.io');
 const { instrument } = require('@socket.io/admin-ui');
 const events = require('./eventsList');
+const websocketAuth = require('../middleware/websocketAuth');
 
 function initWs (httpServer) {
     const io = new Server(httpServer, {
@@ -13,6 +14,8 @@ function initWs (httpServer) {
         auth: false,
         mode: 'development',
     });
+
+    io.use(websocketAuth);
 
     io.on('connection', (socket) => {
         console.log('Client connected', socket.id);
